@@ -31,4 +31,6 @@ netAmount = 0
 for i in range(len(revenues)):
     netAmount += revenues[i]
 print('Total: ' + str(netAmount) + '\n') 
-#rint('Total: ',sum(revenues))
+#print('Total: ',sum(revenues))
+
+#calculate average change between months i.e. Nov12-Oct12=month to month change
