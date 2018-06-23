@@ -56,3 +56,6 @@ print(f'Average Change: $ {sum(profitChanges)/counter}')
 #The greatest increase in profits (date and amount) over the entire period
 
 #The greatest decrease in losses (date and amount) over the entire period
+
+
+###NOTES - should a dictionary be built from CVS file with key values Date, Revenue and Change?  The change field would computed and the 
