@@ -1,61 +1,55 @@
 import csv
+import sys
+import os
+
 
 with open('budget_data.csv','r') as csv_file:
     read_csv = csv.reader(csv_file, delimiter=',')
     
-    dates = []
-    revenues = []
-    profitChanges = []
-    
+    totalMonths = 0
+    totalPL = 0
+    totalMMPL = 0
+    prevMonth = 0
+    mostProfit = 0
+    mostLoss = 0
+    mmChange = 0
     next(read_csv)
+    counter = 0
 
     for row in read_csv:
-        date = row[0]
-        revenue = row[1]
+        #counter to determine number of records, which will equal number of months.
+        totalMonths += 1
+        #running total of Profit and Loss
+        totalPL += int(row[1])
 
-        dates.append(date)
-        revenues.append(int(revenue))
-    
-    # print(dates)
-    # print(revenues)
+        if counter == 0:
+            prevMonth = int(row[1])
+            counter += 1
+        else:
+            mmChange = int(row[1]) - prevMonth
+            if mmChange > mostProfit:
+                mostProfit = mmChange
+                mostProfitMonth = row[0]
+            if mmChange < mostLoss:
+                mostLoss = mmChange
+                mostLossMonth = row[0]
+
+            totalMMPL = totalMMPL + mmChange
+            prevMonth = int(row[1])
+            counter += 1
+
+sys.stdout = open('AnalysisOutput.txt', 'w')
 
 print('')
 print('Financial Analysis\n')
 print('----------------------------\n')
 
-#determine Total Months
-totalMonths = len(dates)
 print('Total Months: ' + str(totalMonths) + '\n')
 
-#calculate total net amount of Profit/Losses over entire period
-netAmount = 0
-for i in range(len(revenues)):
-    netAmount += revenues[i]
-print('Total Profit/Loss: $' + str(netAmount) + '\n') 
-#print('Total: ',sum(revenues))
+print('Total Profit/Loss: $' + str(totalPL) + '\n') 
 
-#calculate average change between months i.e. Nov12-Oct12=month to month change
- 
-counter = 0
+avgMonthChange = totalMMPL/counter
+print(f'Average Change: $ {round(avgMonthChange, 2)} \n')
 
-for j in range(len(revenues)):
-    if j == 0:
-        pass
-    else:
-        k=j-1
-        ####print(f"This is {dates[k]}'s revenue {revenues[k]}")
-        ####print(f"This is {dates[j]}'s revenue {revenues[j]}")
-        profitChanges.append(revenues[j]-revenues[k])
-        counter += 1
-
-###print(sum(profitChanges))
-###print(counter)
-print(f'Average Change: $ {round((sum(profitChanges)/counter), 2)} \n')
-
-
-#The greatest increase in profits (date and amount) over the entire period
-
-#The greatest decrease in losses (date and amount) over the entire period
-
-
-###NOTES - should a dictionary be built from CVS file with key values Date, Revenue and Change?  The change field would computed and the 
+print(f'Greatest increase in profits: {mostProfitMonth} ${mostProfit} \n')
+print(f'Greatest decrease in profits: {mostLossMonth} ${mostLoss}')
