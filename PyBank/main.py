@@ -31,7 +31,7 @@ print('Total Months: ' + str(totalMonths) + '\n')
 netAmount = 0
 for i in range(len(revenues)):
     netAmount += revenues[i]
-print('Total Profit/Loss: ' + str(netAmount) + '\n') 
+print('Total Profit/Loss: $' + str(netAmount) + '\n') 
 #print('Total: ',sum(revenues))
 
 #calculate average change between months i.e. Nov12-Oct12=month to month change
@@ -50,7 +50,7 @@ for j in range(len(revenues)):
 
 ###print(sum(profitChanges))
 ###print(counter)
-print(f'Average Change: $ {sum(profitChanges)/counter}')
+print(f'Average Change: $ {round((sum(profitChanges)/counter), 2)} \n')
 
 
 #The greatest increase in profits (date and amount) over the entire period
