@@ -2,9 +2,10 @@ import csv
 import sys
 import os
 
+filepath = os.path.join('Resources', 'budget_data.csv')
 
-with open('budget_data.csv','r') as csv_file:
-    read_csv = csv.reader(csv_file, delimiter=',')
+with open(filepath,'r', newline='') as csvBudgetData:
+    readBudgetData = csv.reader(csvBudgetData, delimiter=',')
     
     totalMonths = 0
     totalPL = 0
@@ -13,10 +14,10 @@ with open('budget_data.csv','r') as csv_file:
     mostProfit = 0
     mostLoss = 0
     mmChange = 0
-    next(read_csv)
+    next(readBudgetData)
     counter = 0
 
-    for row in read_csv:
+    for row in readBudgetData:
         #counter to determine number of records, which will equal number of months.
         totalMonths += 1
         #running total of Profit and Loss
@@ -38,8 +39,6 @@ with open('budget_data.csv','r') as csv_file:
             prevMonth = int(row[1])
             counter += 1
 
-sys.stdout = open('AnalysisOutput.txt', 'w')
-
 print('')
 print('Financial Analysis\n')
 print('----------------------------\n')
@@ -53,3 +52,5 @@ print(f'Average Change: $ {round(avgMonthChange, 2)} \n')
 
 print(f'Greatest increase in profits: {mostProfitMonth} ${mostProfit} \n')
 print(f'Greatest decrease in profits: {mostLossMonth} ${mostLoss}')
+
+sys.stdout = open('AnalysisOutput.txt', 'w')
