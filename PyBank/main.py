@@ -1,56 +1,71 @@
 import csv
-import sys
 import os
+import sys
+import logging
+
+dates = []
+revenues = []
+profitChanges = []
+counter = 0
+mostProfit = 0
+mostProfitMonth = ''
+mostLoss = 0
+mostLossMonth = ''
 
 filepath = os.path.join('Resources', 'budget_data.csv')
 
-with open(filepath,'r', newline='') as csvBudgetData:
-    readBudgetData = csv.reader(csvBudgetData, delimiter=',')
-    
-    totalMonths = 0
-    totalPL = 0
-    totalMMPL = 0
-    prevMonth = 0
-    mostProfit = 0
-    mostLoss = 0
-    mmChange = 0
-    next(readBudgetData)
-    counter = 0
+with open(filepath, newline='', encoding='utf8') as csv_file:
+    read_csv = csv.reader(csv_file, delimiter=',')    
+    next(read_csv)
+    for row in read_csv:
+        dates.append(row[0])
+        revenues.append(int(row[1]))
 
-    for row in readBudgetData:
-        #counter to determine number of records, which will equal number of months.
-        totalMonths += 1
-        #running total of Profit and Loss
-        totalPL += int(row[1])
+for j in range(len(revenues)):
+    if j == 0:
+        pass
+        profitChanges.append(0)
+    else:
+        k=j-1
+        profitChanges.append(revenues[j]-revenues[k])
+        counter += 1
 
-        if counter == 0:
-            prevMonth = int(row[1])
-            counter += 1
-        else:
-            mmChange = int(row[1]) - prevMonth
-            if mmChange > mostProfit:
-                mostProfit = mmChange
-                mostProfitMonth = row[0]
-            if mmChange < mostLoss:
-                mostLoss = mmChange
-                mostLossMonth = row[0]
-
-            totalMMPL = totalMMPL + mmChange
-            prevMonth = int(row[1])
-            counter += 1
+#sys.stdout = open('AnalysisOutput.txt', 'w')
 
 print('')
 print('Financial Analysis\n')
 print('----------------------------\n')
 
-print('Total Months: ' + str(totalMonths) + '\n')
+#determine Total Months
+totalMonths = len(dates)
+print(f'Total Months: {str(totalMonths)} \n')
 
-print('Total Profit/Loss: $' + str(totalPL) + '\n') 
+#calculate total net amount of Profit/Losses over entire period
+# netAmount = 0
+# for i in range(len(revenues)):
+#     netAmount += revenues[i]
+# print(f'Total Profit/Loss: $ {str(netAmount)} \n') 
+print(f'Total Profit/Loss: $ {sum(revenues)} \n')
 
-avgMonthChange = totalMMPL/counter
-print(f'Average Change: $ {round(avgMonthChange, 2)} \n')
+#calculate average change between months i.e. Nov12-Oct12=month to month change
+print(f'Average Change: $ {round((sum(profitChanges)/counter), 2)} \n')
 
-print(f'Greatest increase in profits: {mostProfitMonth} ${mostProfit} \n')
-print(f'Greatest decrease in profits: {mostLossMonth} ${mostLoss}')
+#Create new tuple list using lists already created.
+# keys = ["Date", "Revenue", "Change from Previous Month"]
+# values = [dates, revenues, profitChanges]
+# y = dict(zip(keys,values))
+extendedData = zip(dates, revenues, profitChanges)
+for j in extendedData:
+    if j[2] > mostProfit:
+        mostProfit = j[2]
+        mostProfitMonth = j[0]
+    if j[2] < mostLoss:
+        mostLoss = j[2]
+        mostLossMonth = j[0]
+        
+#The greatest increase in profits (date and amount) over the entire period
+print(f'Greatest Increase in Profits: {mostProfitMonth} (${mostProfit}) \n')
 
-sys.stdout = open('AnalysisOutput.txt', 'w')
+#The greatest decrease in losses (date and amount) over the entire period
+print(f'Greatest Increase in Profits: {mostLossMonth} (${mostLoss}) \n')
+
