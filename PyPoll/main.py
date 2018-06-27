@@ -4,12 +4,11 @@ import sys
 import logging
 
 def calcNumVote(candidate):
-    perVotesfor = 0.0
+    #perVotesfor = 0.0
     numVotesfor = 0
     for x in candidates:
         if candidate == x:
-            numVotesfor += 1
-            
+            numVotesfor += 1      
     #perVotesfor = numVotesfor/totalVotesCast
     #return (perVotesfor, numVotesfor)
     return numVotesfor
@@ -23,7 +22,9 @@ def calcPerVote(candidate):
     perVotesfor = round(((numVotesfor/totalVotesCast)*100), 3)
     return perVotesfor
     
-
+####return multiple values use Tuple
+####build tuple with parentheses, i.e. return TupleName
+####
 
 totalVotesCast = 0
 candidates = []
@@ -51,25 +52,22 @@ totalVotesCast = len(candidates)
 print(f'Total Votes Case: {totalVotesCast}\n')
 print('----------------------------\n')
 # A complete list of candidates who received votes
+# The percentage of votes each candidate won
+# The total number of votes each candidate won
 
-setCandidates = set(candidates)
+setCandidates = sorted(set(candidates))
 ListCandidates = list(setCandidates)
 #print(ListCandidates)
 #input('Press Enter....')
 
-winner = 0
+mostVotes = 0.0
 
 for i in ListCandidates:
     print(f'{i}: {calcPerVote(i)}% ({calcNumVote(i)}) \n')
-if calcPerVote(i) > winner:
-    winner = i
-print('----------------------------\n')
-print(f'Winner: {winner}')
-
-
-
-# The percentage of votes each candidate won
-
-# The total number of votes each candidate won
+    if calcPerVote(i) > mostVotes:
+        winner = i
+        mostVotes = calcPerVote(i)
 
 # The winner of the election based on popular vote.
+print('----------------------------\n')
+print(f'Winner: {winner}')

@@ -30,31 +30,25 @@ for j in range(len(revenues)):
         profitChanges.append(revenues[j]-revenues[k])
         counter += 1
 
-#sys.stdout = open('AnalysisOutput.txt', 'w')
-
-print('')
-print('Financial Analysis\n')
-print('----------------------------\n')
-
 #determine Total Months
 totalMonths = len(dates)
-print(f'Total Months: {str(totalMonths)} \n')
-
-#calculate total net amount of Profit/Losses over entire period
-# netAmount = 0
-# for i in range(len(revenues)):
-#     netAmount += revenues[i]
-# print(f'Total Profit/Loss: $ {str(netAmount)} \n') 
-print(f'Total Profit/Loss: $ {sum(revenues)} \n')
-
-#calculate average change between months i.e. Nov12-Oct12=month to month change
-print(f'Average Change: $ {round((sum(profitChanges)/counter), 2)} \n')
 
 #Create new tuple list using lists already created.
-# keys = ["Date", "Revenue", "Change from Previous Month"]
-# values = [dates, revenues, profitChanges]
-# y = dict(zip(keys,values))
 extendedData = zip(dates, revenues, profitChanges)
+
+file_out = open('AnalysisOutput.txt', 'w')
+
+file_out.write('\n')
+file_out.write('Financial Analysis\n')
+file_out.write('----------------------------\n \n')
+file_out.write(f'Total Months: {str(totalMonths)}\n \n')
+
+#calculate total net amount of Profit/Losses over entire period
+file_out.write(f'Total Profit/Loss: $ {sum(revenues)} \n \n')
+
+#calculate average change between months i.e. Nov12-Oct12=month to month change
+file_out.write(f'Average Change: $ {round((sum(profitChanges)/counter), 2)} \n \n')
+
 for j in extendedData:
     if j[2] > mostProfit:
         mostProfit = j[2]
@@ -64,8 +58,13 @@ for j in extendedData:
         mostLossMonth = j[0]
         
 #The greatest increase in profits (date and amount) over the entire period
-print(f'Greatest Increase in Profits: {mostProfitMonth} (${mostProfit}) \n')
+file_out.write(f'Greatest Increase in Profits: {mostProfitMonth} (${mostProfit}) \n \n')
 
 #The greatest decrease in losses (date and amount) over the entire period
-print(f'Greatest Increase in Profits: {mostLossMonth} (${mostLoss}) \n')
+file_out.write(f'Greatest Increase in Profits: {mostLossMonth} (${mostLoss}) \n')
+file_out.close()
 
+#Open output file created in above code and output to the console
+file_in = open('AnalysisOutput.txt','r')
+print(file_in.read())
+file_in.close()
